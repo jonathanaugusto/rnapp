@@ -1,0 +1,20 @@
+{
+  "students": [
+    {
+      "id": 1, 
+      "name": "Jonathan Augusto da Silva",
+      "birthDate": "1989-10-13T03:40:00.000-03:00",
+      "grade": 9,
+      "zipCode": "22780-792",
+      "addressStreet": "Rua Aristeu",
+      "addressNumber": 210,
+      "addressDetail": "Apto. 202",
+      "district": "Curicica",
+      "city": "Rio de Janeiro",
+      "state": "RJ",
+      "motherName": "Maria do Carmo da Silva",
+      "motherReg": "406223044-53",
+      "paymentDay": 1
+    }
+  ]
+}
