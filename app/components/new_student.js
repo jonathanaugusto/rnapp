@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, ScrollView, Dimensions, Text, TextInput, TouchableOpacity } from 'react-native';
+import DatePicker from 'react-native-datepicker';
 
 import { connect } from 'react-redux';
 import { addStudent, updateStudent } from '../actions'
@@ -16,7 +17,7 @@ class NewStudent extends Component {
         this.state = {
 
             name: (props.edit) ? props.student.name : "",
-            birthdate: (props.edit) ? props.student.birthdate : "",
+            birthDate: (props.edit) ? props.student.birthDate : new Date('2000-01-01T00:00:00'),
             grade: (props.edit) ? props.student.grade : "",
             zipCode: (props.edit) ? props.student.zipCode : "",
             addressStreet: (props.edit) ? props.student.addressStreet : "",
@@ -33,6 +34,7 @@ class NewStudent extends Component {
 
         this.generateID = this.generateID.bind(this);
         this.addStudent = this.addStudent.bind(this);
+
     }
 
     generateID() {
@@ -44,6 +46,21 @@ class NewStudent extends Component {
         });
 
         return id;
+    }
+
+
+    validateForm() {
+        return this.state.name.length > 0 &&
+            this.state.grade.length > 0
+            ;
+    };
+
+    validateRequired(field) {
+        return field.length > 0;
+    }
+    
+    validateNumber(field) {
+        return parseInt(field);
     }
 
     addStudent() {
@@ -96,18 +113,44 @@ class NewStudent extends Component {
             <View style={{ flex: 1, backgroundColor: '#fff' }}>
                 <ScrollView style={{ flex: 1, paddingLeft: 10, paddingRight: 10 }}>
 
+                    <Text>
+                        Todos os campos são obrigatórios.
+                    </Text>
+                    <Text style={[styles.title]}>
+                        Dados do estudante
+                    </Text>
                     <TextInput onChangeText={(text) => this.setState({ name: text })}
-                        placeholder={"Nome completo"} autoFocus={true} style={[styles.textField]}
+                        placeholder={"Nome completo"} autoFocus={true} style={this.validateRequired(this.state.name) ? [styles.textField] : [styles.textError]}
                         value={this.state.name}
                     />
 
-                    <TextInput onChangeText={(text) => this.setState({ birthDate: text })}
+                    {/* <TextInput onChangeText={(text) => this.setState({ birthDate: text })}
                         placeholder={"Data de nascimento"} autoFocus={false} style={[styles.textField]}
                         value={this.state.birthDate}
+                    /> */}
+
+                    <DatePicker
+                        style={{ width: 200 }}
+                        date={this.state.birthDate} //initial date from state
+                        mode="date" //The enum of date, datetime and time
+                        placeholder="Data de nascimento"
+                        format="DD/MM/YYYY"
+                        confirmBtnText="Confirmar"
+                        cancelBtnText="Cancelar"
+                        customStyles={{
+                            dateIcon: {
+                                position: 'absolute',
+                                left: 0,
+                                top: 4,
+                                marginLeft: 0
+                            },
+                            dateInput: [styles.textField]
+                        }}
+                        onDateChange={(date) => { this.setState({ birthDate: date }) }}
                     />
 
                     <TextInput onChangeText={(text) => this.setState({ grade: text })}
-                        placeholder={"Série de ingresso"} autoFocus={false} style={[styles.textField]}
+                        placeholder={"Série de ingresso"} autoFocus={false} style={this.validateNumber(this.state.grade) ? [styles.textField] : [styles.textError]}
                         value={this.state.grade}
                     />
                     <Text style={[styles.title]}>
@@ -119,41 +162,41 @@ class NewStudent extends Component {
                     />
 
                     <TextInput onChangeText={(text) => this.setState({ addressStreet: text })}
-                        placeholder={"Nome da rua"} autoFocus={false} style={[styles.textField]}
+                        placeholder={"Nome da rua"} autoFocus={false} style={this.validateRequired(this.state.addressStreet) ? [styles.textField] : [styles.textError]}
                         value={this.state.addressStreet}
                     />
 
                     <TextInput onChangeText={(text) => this.setState({ addressNumber: text })}
-                        placeholder={"Número"} autoFocus={false} style={[styles.textField]}
+                        placeholder={"Número"} autoFocus={false} style={this.validateRequired(this.state.addressNumber) ? [styles.textField] : [styles.textError]}
                         value={this.state.addressNumber}
                     />
 
                     <TextInput onChangeText={(text) => this.setState({ addressDetail: text })}
-                        placeholder={"Complemento"} autoFocus={false} style={[styles.textField]}
+                        placeholder={"Complemento"} autoFocus={false} style={this.validateRequired(this.state.addressDetail) ? [styles.textField] : [styles.textError]}
                         value={this.state.addressDetail}
                     />
 
                     <TextInput onChangeText={(text) => this.setState({ district: text })}
-                        placeholder={"Bairro"} autoFocus={false} style={[styles.textField]}
+                        placeholder={"Bairro"} autoFocus={false} style={this.validateRequired(this.state.district) ? [styles.textField] : [styles.textError]}
                         value={this.state.district}
                     />
 
                     <TextInput onChangeText={(text) => this.setState({ city: text })}
-                        placeholder={"Cidade"} autoFocus={false} style={[styles.textField]}
+                        placeholder={"Cidade"} autoFocus={false} style={this.validateRequired(this.state.city) ? [styles.textField] : [styles.textError]}
                         value={this.state.city}
                     />
 
                     <TextInput onChangeText={(text) => this.setState({ state: text })}
-                        placeholder={"Estado"} autoFocus={false} style={[styles.textField]}
+                        placeholder={"Estado"} autoFocus={false} style={this.validateRequired(this.state.state) ? [styles.textField] : [styles.textError]}
                         value={this.state.state}
                     />
-                    
+
                     <Text style={[styles.title]}>
-                        Dados da mãe
+                        Dados do responsável
                     </Text>
 
                     <TextInput onChangeText={(text) => this.setState({ motherName: text })}
-                        placeholder={"Nome completo"} autoFocus={false} style={[styles.textField]}
+                        placeholder={"Nome da mãe"} autoFocus={false} style={this.validateRequired(this.state.motherName) ? [styles.textField] : [styles.textError]}
                         value={this.state.motherName}
                     />
 
@@ -169,16 +212,17 @@ class NewStudent extends Component {
 
                 </ScrollView>
                 <TouchableOpacity style={[styles.saveBtn]}
-                    disabled={(this.state.name.length > 0) ? false : true}
+                    disabled={(this.validateForm()) ? false : true}
                     onPress={this.addStudent}>
                     <Text style={[styles.buttonText,
                     {
-                        color: (this.state.name.length > 0) ? "#FFF" : "rgba(255,255,255,.5)"
+                        color: (this.validateForm()) ? "#FFF" : "rgba(255,255,255,.5)"
                     }]}>
                         Save
                     </Text>
                 </TouchableOpacity>
                 <KeyboardSpacer />
+
             </View>
         );
     }
@@ -230,9 +274,23 @@ var styles = StyleSheet.create({
         fontWeight: "400",
         lineHeight: 16,
         fontSize: 14,
+        borderWidth: 1,
+        borderColor: "#dddddd",
         // fontFamily: 'Helvetica Neue',
         height: 36,
         padding: 8,
-        paddingLeft: 0
+        paddingLeft: 5
+    },
+
+    textError: {
+        fontWeight: "400",
+        lineHeight: 16,
+        fontSize: 14,
+        borderWidth: 1,
+        borderColor: "#ff0000",
+        // fontFamily: 'Helvetica Neue',
+        height: 36,
+        padding: 8,
+        paddingLeft: 5
     },
 });

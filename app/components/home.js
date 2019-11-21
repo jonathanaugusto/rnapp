@@ -99,8 +99,8 @@ class Home extends Component {
                     <Text style={styles.student}>
                         {item.name}
                     </Text>
-                    <Text style={styles.author}>
-                        {item.birthdate}
+                    <Text style={styles.birthDate}>
+                        {item.birthDate}
                     </Text>
 
                     <ActionSheet
@@ -161,14 +161,14 @@ const styles = StyleSheet.create({
         padding: 8
     },
 
-    author: {
+    birthDate: {
         fontSize: 14,
-        fontWeight: "600",
-        marginTop: 8
+        marginTop: 5
     },
 
     student: {
-        marginTop: 5,
+        marginTop: 8,
+        fontWeight: "600",
         fontSize: 14,
     },
 

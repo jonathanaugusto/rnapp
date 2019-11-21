@@ -23,7 +23,7 @@ const dataReducer = (state = dataState, action) => {
             let index = getIndex(students, student.id); //find the index of the student with the student id passed
             if (index !== -1) {
                 students[index]['name'] = student.name;
-                students[index]['birthdate'] = student.birthdate;
+                students[index]['birthDate'] = student.birthDate;
                 students[index]['grade'] = student.grade;
                 students[index]['addressStreet'] = student.addressStreet;
                 students[index]['addressNumber'] = student.addressNumber;
