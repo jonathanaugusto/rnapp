@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, ScrollView, Dimensions, Text, TextInput, TouchableOpacity } from 'react-native';
 import DatePicker from 'react-native-datepicker';
-
+import { TextInputMask } from 'react-native-masked-text';
 import { connect } from 'react-redux';
-import { addStudent, updateStudent } from '../actions'
+import { addStudent, updateStudent } from '../actions';
 import { Actions } from 'react-native-router-flux';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
@@ -51,64 +51,64 @@ class NewStudent extends Component {
 
     validateForm() {
         return this.validateRequired(this.state.name) &&
-        this.validateRequired(this.state.birthDate) &&
-        this.validateRequired(this.state.zipCode) &&
-        this.validateRequired(this.state.addressStreet) &&
-        this.validateRequired(this.state.addressDetail) &&
-        this.validateRequired(this.state.district) &&
-        this.validateRequired(this.state.city) &&
-        this.validateRequired(this.state.state) &&
-        this.validateRequired(this.state.motherName) &&
-        this.validateRequired(this.state.motherReg) &&
-        this.validateRequired(this.state.motherReg) &&
-        this.validateNumber(this.state.grade) &&
-        this.validateNumber(this.state.addressNumber) &&
-        this.validateNumber(this.state.paymentDay);
+            this.validateRequired(this.state.birthDate) &&
+            this.validateRequired(this.state.zipCode) &&
+            this.validateRequired(this.state.addressStreet) &&
+            this.validateRequired(this.state.addressDetail) &&
+            this.validateRequired(this.state.district) &&
+            this.validateRequired(this.state.city) &&
+            this.validateRequired(this.state.state) &&
+            this.validateRequired(this.state.motherName) &&
+            this.validateRequired(this.state.motherReg) &&
+            this.validateRequired(this.state.motherReg) &&
+            this.validateNumber(this.state.grade) &&
+            this.validateNumber(this.state.addressNumber) &&
+            this.validateNumber(this.state.paymentDay);
     };
 
     validateRequired(field) {
         return field.length > 0;
     }
-    
+
     validateNumber(field) {
         return parseInt(field);
     }
 
     validateCPF(field) {
-            cpf = field.replace(/[^\d]+/g,'');	
-            if(cpf == '') return false;	
-            
-            if (cpf.length != 11 || 
-                cpf == "00000000000" || 
-                cpf == "11111111111" || 
-                cpf == "22222222222" || 
-                cpf == "33333333333" || 
-                cpf == "44444444444" || 
-                cpf == "55555555555" || 
-                cpf == "66666666666" || 
-                cpf == "77777777777" || 
-                cpf == "88888888888" || 
-                cpf == "99999999999")
-                    return false;		
-                    
-            add = 0;	
-            for (i=0; i < 9; i ++)		
-                add += parseInt(cpf.charAt(i)) * (10 - i);	
-                rev = 11 - (add % 11);	
-                if (rev == 10 || rev == 11)		
-                    rev = 0;	
-                if (rev != parseInt(cpf.charAt(9)))		
-                    return false;	
-                    
-            add = 0;	
-            for (i = 0; i < 10; i ++)		
-                add += parseInt(cpf.charAt(i)) * (11 - i);	
-            rev = 11 - (add % 11);	
-            if (rev == 10 || rev == 11)	
-                rev = 0;	
-            if (rev != parseInt(cpf.charAt(10)))
-                return false;		
-            return true;   
+        cpf = field.replace(/[^\d]+/g, '');
+        if (cpf == '') return false;
+
+        if (cpf.length != 11 ||
+            cpf == "00000000000" ||
+            cpf == "11111111111" ||
+            cpf == "22222222222" ||
+            cpf == "33333333333" ||
+            cpf == "44444444444" ||
+            cpf == "55555555555" ||
+            cpf == "66666666666" ||
+            cpf == "77777777777" ||
+            cpf == "88888888888" ||
+            cpf == "99999999999")
+            return false;
+
+        add = 0;
+        for (i = 0; i < 9; i++)
+            add += parseInt(cpf.charAt(i)) * (10 - i);
+        rev = 11 - (add % 11);
+        if (rev == 10 || rev == 11)
+            rev = 0;
+        if (rev != parseInt(cpf.charAt(9)))
+            return false;
+
+        add = 0;
+        for (i = 0; i < 10; i++)
+            add += parseInt(cpf.charAt(i)) * (11 - i);
+        rev = 11 - (add % 11);
+        if (rev == 10 || rev == 11)
+            rev = 0;
+        if (rev != parseInt(cpf.charAt(10)))
+            return false;
+        return true;
     }
 
     addStudent() {
@@ -204,7 +204,10 @@ class NewStudent extends Component {
                     <Text style={[styles.title]}>
                         Endereço
                     </Text>
-                    <TextInput onChangeText={(text) => this.setState({ zipCode: text })}
+                    <TextInputMask
+                        // refInput={ref => { this.input = ref }}
+                        type={'zip-code'}
+                        onChangeText={(text) => this.setState({ zipCode: text })}
                         placeholder={"CEP"} autoFocus={false} style={this.validateRequired(this.state.addressStreet) ? [styles.textField] : [styles.textError]}
                         value={this.state.zipCode}
                     />
@@ -248,9 +251,12 @@ class NewStudent extends Component {
                         value={this.state.motherName}
                     />
 
-                    <TextInput onChangeText={(text) => this.setState({ motherReg: text })}
+                    <TextInputMask
+                        // refInput={ref => { this.state.motherReg = ref }}
+                        type={'cpf'}
+                        onChangeText={(text) => this.setState({ motherReg: text })}
                         placeholder={"CPF"} style={this.validateCPF(this.state.motherReg) ? [styles.textField] : [styles.textError]}
-                        value={this.state.motherReg}
+                        value={this.state.motherReg} mask={"[000].[000].[000]-[00]"}
                     />
 
                     <TextInput onChangeText={(text) => this.setState({ paymentDay: text })}
