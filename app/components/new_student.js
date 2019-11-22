@@ -17,7 +17,7 @@ class NewStudent extends Component {
         this.state = {
 
             name: (props.edit) ? props.student.name : "",
-            birthDate: (props.edit) ? props.student.birthDate : new Date('2000-01-01T00:00:00'),
+            birthDate: (props.edit) ? props.student.birthDate : "",
             grade: (props.edit) ? props.student.grade : "",
             zipCode: (props.edit) ? props.student.zipCode : "",
             addressStreet: (props.edit) ? props.student.addressStreet : "",
@@ -50,9 +50,20 @@ class NewStudent extends Component {
 
 
     validateForm() {
-        return this.state.name.length > 0 &&
-            this.state.grade.length > 0
-            ;
+        return this.validateRequired(this.state.name) &&
+        this.validateRequired(this.state.birthDate) &&
+        this.validateRequired(this.state.zipCode) &&
+        this.validateRequired(this.state.addressStreet) &&
+        this.validateRequired(this.state.addressDetail) &&
+        this.validateRequired(this.state.district) &&
+        this.validateRequired(this.state.city) &&
+        this.validateRequired(this.state.state) &&
+        this.validateRequired(this.state.motherName) &&
+        this.validateRequired(this.state.motherReg) &&
+        this.validateRequired(this.state.motherReg) &&
+        this.validateNumber(this.state.grade) &&
+        this.validateNumber(this.state.addressNumber) &&
+        this.validateNumber(this.state.paymentDay);
     };
 
     validateRequired(field) {
@@ -61,6 +72,43 @@ class NewStudent extends Component {
     
     validateNumber(field) {
         return parseInt(field);
+    }
+
+    validateCPF(field) {
+            cpf = field.replace(/[^\d]+/g,'');	
+            if(cpf == '') return false;	
+            
+            if (cpf.length != 11 || 
+                cpf == "00000000000" || 
+                cpf == "11111111111" || 
+                cpf == "22222222222" || 
+                cpf == "33333333333" || 
+                cpf == "44444444444" || 
+                cpf == "55555555555" || 
+                cpf == "66666666666" || 
+                cpf == "77777777777" || 
+                cpf == "88888888888" || 
+                cpf == "99999999999")
+                    return false;		
+                    
+            add = 0;	
+            for (i=0; i < 9; i ++)		
+                add += parseInt(cpf.charAt(i)) * (10 - i);	
+                rev = 11 - (add % 11);	
+                if (rev == 10 || rev == 11)		
+                    rev = 0;	
+                if (rev != parseInt(cpf.charAt(9)))		
+                    return false;	
+                    
+            add = 0;	
+            for (i = 0; i < 10; i ++)		
+                add += parseInt(cpf.charAt(i)) * (11 - i);	
+            rev = 11 - (add % 11);	
+            if (rev == 10 || rev == 11)	
+                rev = 0;	
+            if (rev != parseInt(cpf.charAt(10)))
+                return false;		
+            return true;   
     }
 
     addStudent() {
@@ -157,7 +205,7 @@ class NewStudent extends Component {
                         Endereço
                     </Text>
                     <TextInput onChangeText={(text) => this.setState({ zipCode: text })}
-                        placeholder={"CEP"} autoFocus={false} style={[styles.textField]}
+                        placeholder={"CEP"} autoFocus={false} style={this.validateRequired(this.state.addressStreet) ? [styles.textField] : [styles.textError]}
                         value={this.state.zipCode}
                     />
 
@@ -167,7 +215,7 @@ class NewStudent extends Component {
                     />
 
                     <TextInput onChangeText={(text) => this.setState({ addressNumber: text })}
-                        placeholder={"Número"} autoFocus={false} style={this.validateRequired(this.state.addressNumber) ? [styles.textField] : [styles.textError]}
+                        placeholder={"Número"} autoFocus={false} style={this.validateNumber(this.state.addressNumber) ? [styles.textField] : [styles.textError]}
                         value={this.state.addressNumber}
                     />
 
@@ -196,17 +244,17 @@ class NewStudent extends Component {
                     </Text>
 
                     <TextInput onChangeText={(text) => this.setState({ motherName: text })}
-                        placeholder={"Nome da mãe"} autoFocus={false} style={this.validateRequired(this.state.motherName) ? [styles.textField] : [styles.textError]}
+                        placeholder={"Nome da mãe"} style={this.validateRequired(this.state.motherName) ? [styles.textField] : [styles.textError]}
                         value={this.state.motherName}
                     />
 
                     <TextInput onChangeText={(text) => this.setState({ motherReg: text })}
-                        placeholder={"CPF"} autoFocus={false} style={[styles.textField]}
+                        placeholder={"CPF"} style={this.validateCPF(this.state.motherReg) ? [styles.textField] : [styles.textError]}
                         value={this.state.motherReg}
                     />
 
                     <TextInput onChangeText={(text) => this.setState({ paymentDay: text })}
-                        placeholder={"Dia preferencial para pagamento"} autoFocus={false} style={[styles.textField]}
+                        placeholder={"Dia preferencial para pagamento"} style={this.validateNumber(this.state.paymentDay) ? [styles.textField] : [styles.textError]}
                         value={this.state.paymentDay}
                     />
 

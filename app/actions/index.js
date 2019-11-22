@@ -13,6 +13,9 @@ export function addStudent(student){
             if (students !== null){
                 students = JSON.parse(students);
                 students.unshift(student); //add the new student to the top
+                students.sort(function(a, b) {
+                    return a["name"].localeCompare(b["name"]);
+                  });
                 AsyncStorage.setItem('data', JSON.stringify(students), () => {
                     dispatch({type: ADD_STUDENT, student:student});
                 });
@@ -70,7 +73,7 @@ export function deleteStudent(id){
                 students = JSON.parse(students);
 
                 var index = getIndex(students, id); //find the index of the student with the id passed
-                if(index !== -1) students.splice(index, 1);//if yes, undo, remove the STUDENT
+                if(index !== -1) students.splice(index, 1);//if yes, remove the STUDENT
                 AsyncStorage.setItem('data', JSON.stringify(students), () => {
                     dispatch({type: DELETE_STUDENT, id:id});
                 });
@@ -81,5 +84,5 @@ export function deleteStudent(id){
 
 function getIndex(data, id){
     let clone = JSON.parse(JSON.stringify(data));
-    return clone.findIndex((obj) => parseInt(obj.id) === parseInt(id));
+    return clone.findIndex((obj) => obj.id == id);
 }

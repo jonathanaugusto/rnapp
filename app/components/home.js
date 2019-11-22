@@ -5,8 +5,11 @@ import {
     FlatList,
     View,
     Text,
-    ActivityIndicator, TouchableHighlight
+    ActivityIndicator,
+    TouchableHighlight,
+    Button
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -94,16 +97,34 @@ class Home extends Component {
 
     renderItem({ item, index }) {
         return (
-            <TouchableHighlight onPress={() => { this.showActionSheet() }} underlayColor='rgba(0,0,0,.2)'>
-                <View style={styles.row}>
+
+            <View style={styles.row}>
+                <View style={styles.colitem}>
                     <Text style={styles.student}>
                         {item.name}
                     </Text>
                     <Text style={styles.birthDate}>
                         {item.birthDate}
                     </Text>
+                </View>
 
-                    <ActionSheet
+                <TouchableHighlight  style={styles.buttonEdit}
+                        onPress={() => { Actions.new_student({ student: item, edit: true, title: "Editar cadastro" }) }}>
+                    <View style={styles.colbuttons}>
+                        <Icon name="edit" style={styles.icon} size={36} color="#fff">
+                        </Icon>
+                    </View>
+                </TouchableHighlight>
+
+                <TouchableHighlight style={styles.buttonDelete}
+                        onPress={() => { this.props.deleteStudent(item.id) }}>
+                    <View style={styles.colbuttons}>
+                        <Icon name="trash" style={styles.icon} size={35} color="#fff">
+                        </Icon>
+                    </View>
+                </TouchableHighlight>
+
+                {/* <ActionSheet
                         ref={o => this.ActionSheet = o}
                         options={BUTTONS}
                         cancelButtonIndex={CANCEL_INDEX}
@@ -112,9 +133,8 @@ class Home extends Component {
                             if (index === 0) Actions.new_student({ student: item, edit: true, title: "Editar cadastro" })
                             else if (index === 1) this.props.deleteStudent(item.id)
                         }}
-                    />
-                </View>
-            </TouchableHighlight>
+                    /> */}
+            </View>
         )
     }
 };
@@ -158,7 +178,37 @@ const styles = StyleSheet.create({
     row: {
         borderBottomWidth: 1,
         borderColor: "#ccc",
-        padding: 8
+        padding: 8,
+        flexDirection: "row",
+        width: "100%"
+    },
+
+    colitem: {
+        width: "70%",
+        height: "auto"
+    },
+
+    colbuttons: {
+        flexGrow: 1,
+        width: 42,
+        alignItems: 'center',
+        alignContent: 'center',
+        textAlignVertical: "center",
+        justifyContent:'center'
+    },
+
+    buttonEdit: {
+        backgroundColor: "#009",
+        marginHorizontal: 5
+    },
+
+    buttonDelete: {
+        backgroundColor: "#900",
+        marginHorizontal: 5
+    },
+
+    icon: {
+        paddingVertical: "auto"
     },
 
     birthDate: {
@@ -167,7 +217,7 @@ const styles = StyleSheet.create({
     },
 
     student: {
-        marginTop: 8,
+        marginTop: 5,
         fontWeight: "600",
         fontSize: 14,
     },

@@ -1,20 +1,52 @@
 {
   "students": [
     {
-      "id": 1, 
-      "name": "Jonathan Augusto da Silva",
-      "birthDate": "1989-10-13T03:40:00.000-03:00",
-      "grade": 9,
+      "id": "12122024213143-111210-4131221-14121022-2314221442213300122220", 
+      "name": "Jonathan Augusto",
+      "birthDate": "13/10/1989",
+      "grade": "9",
       "zipCode": "22780-792",
       "addressStreet": "Rua Aristeu",
-      "addressNumber": 210,
+      "addressNumber": "210",
       "addressDetail": "Apto. 202",
       "district": "Curicica",
       "city": "Rio de Janeiro",
       "state": "RJ",
       "motherName": "Maria do Carmo da Silva",
-      "motherReg": "406223044-53",
-      "paymentDay": 1
+      "motherReg": "111111111-11",
+      "paymentDay": "1"
+    },
+    {
+      "id": "12122024213143-111210-4131221-14121022-2314221442213300122221", 
+      "name": "Aarao",
+      "birthDate": "01/01/1991",
+      "grade": "8",
+      "zipCode": "22000-000",
+      "addressStreet": "Rua A",
+      "addressNumber": "1",
+      "addressDetail": "casa 2",
+      "district": "Sepetiba",
+      "city": "Rio de Janeiro",
+      "state": "RJ",
+      "motherName": "Adriana",
+      "motherReg": "222222222-22",
+      "paymentDay": "2"
+    },
+    {
+      "id": "12122024213143-111210-4131221-14121022-2314221442213300122222", 
+      "name": "Zwinglio",
+      "birthDate": "01/01/1992",
+      "grade": "7",
+      "zipCode": "23000-000",
+      "addressStreet": "Rua B",
+      "addressNumber": "2",
+      "addressDetail": "casa 3",
+      "district": "Copacabana",
+      "city": "Rio de Janeiro",
+      "state": "RJ",
+      "motherName": "Zulmira",
+      "motherReg": "333333333-33",
+      "paymentDay": "3"
     }
   ]
 }
