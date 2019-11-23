@@ -41,9 +41,17 @@ const dataReducer = (state = dataState, action) => {
 
         case DELETE_STUDENT:{
             let students =  cloneObject(state.students) //clone the current state
+            
+            console.log(action.id);
+            
+            console.log(students);
             let index = getIndex(students, action.id); //find the index of the student with the id passed
+            
+            console.log(index);
             if(index !== -1) students.splice(index, 1);//if yes, undo, remove the STUDENT
             state = Object.assign({}, state, { students: students});
+            
+            console.log(students);
             return state;
         }
 
@@ -59,7 +67,7 @@ function cloneObject(object){
 
 function getIndex(data, id){
     let clone = JSON.parse(JSON.stringify(data));
-    return clone.findIndex((obj) => parseInt(obj.id) === parseInt(id));
+    return clone.findIndex((obj) => obj.id === id);
 }
 
 // Combine all the reducers

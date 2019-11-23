@@ -85,9 +85,11 @@ class Home extends Component {
                         keyExtractor={(item, index) => index} />
 
 
-                    <TouchableHighlight style={styles.addButton}
+                    <TouchableHighlight style={styles.buttonAdd}
                         underlayColor='#ff7043' onPress={() => Actions.new_student()}>
-                        <Text style={{ fontSize: 25, color: 'white' }}>+</Text>
+                        {/* <Text style={{ fontSize: 25, color: 'white' }}>+</Text> */}
+                        <Icon name="plus" style={styles.icon} size={32} color="#fff">
+                        </Icon>
                     </TouchableHighlight>
 
                 </View>
@@ -108,7 +110,7 @@ class Home extends Component {
                     </Text>
                 </View>
 
-                <TouchableHighlight  style={styles.buttonEdit}
+                <TouchableHighlight  style={[styles.buttons, styles.buttonEdit]}
                         onPress={() => { Actions.new_student({ student: item, edit: true, title: "Editar cadastro" }) }}>
                     <View style={styles.colbuttons}>
                         <Icon name="edit" style={styles.icon} size={36} color="#fff">
@@ -116,7 +118,7 @@ class Home extends Component {
                     </View>
                 </TouchableHighlight>
 
-                <TouchableHighlight style={styles.buttonDelete}
+                <TouchableHighlight style={[styles.buttons, styles.buttonDelete]}
                         onPress={() => { this.props.deleteStudent(item.id) }}>
                     <View style={styles.colbuttons}>
                         <Icon name="trash" style={styles.icon} size={35} color="#fff">
@@ -165,7 +167,7 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#F5F5F5'
+        backgroundColor: '#eee'
     },
 
     activityIndicatorContainer: {
@@ -197,14 +199,26 @@ const styles = StyleSheet.create({
         justifyContent:'center'
     },
 
+    buttons: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 5,
+        marginHorizontal: 5,
+        shadowColor: "#000000",
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        shadowOffset: {
+            height: 10,
+            width: 10
+        }
+    },
+
     buttonEdit: {
         backgroundColor: "#009",
-        marginHorizontal: 5
     },
 
     buttonDelete: {
         backgroundColor: "#900",
-        marginHorizontal: 5
     },
 
     icon: {
@@ -222,7 +236,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
 
-    addButton: {
+    buttonAdd: {
         backgroundColor: '#ff5722',
         borderColor: '#ff5722',
         borderWidth: 1,

@@ -35,6 +35,22 @@ class NewStudent extends Component {
         this.generateID = this.generateID.bind(this);
         this.addStudent = this.addStudent.bind(this);
 
+        this.fields = {
+            'name': "Nome completo",
+            'birthDate': "Data de nascimento",
+            'grade': "Série de ingresso",
+            'zipCode': "CEP",
+            'addressStreet': "Nome da rua",
+            'addressNumber': "Número",
+            'addressDetail': "Complemento",
+            'district': "Bairro",
+            'city': "Cidade",
+            'state': "Estado",
+            'motherName': "Nome da mãe",
+            'motherReg': "CPF",
+            'paymentDay': "Dia preferencial para pagamento"
+        }
+
     }
 
     generateID() {
@@ -59,8 +75,7 @@ class NewStudent extends Component {
             this.validateRequired(this.state.city) &&
             this.validateRequired(this.state.state) &&
             this.validateRequired(this.state.motherName) &&
-            this.validateRequired(this.state.motherReg) &&
-            this.validateRequired(this.state.motherReg) &&
+            this.validateCPF(this.state.motherReg) &&
             this.validateNumber(this.state.grade) &&
             this.validateNumber(this.state.addressNumber) &&
             this.validateNumber(this.state.paymentDay);
@@ -158,112 +173,216 @@ class NewStudent extends Component {
 
     render() {
         return (
-            <View style={{ flex: 1, backgroundColor: '#fff' }}>
+            <View style={[styles.view]}>
                 <ScrollView style={{ flex: 1, paddingLeft: 10, paddingRight: 10 }}>
 
-                    <Text>
+                    <Text style={[styles.introText]}>
                         Todos os campos são obrigatórios.
                     </Text>
                     <Text style={[styles.title]}>
                         Dados do estudante
                     </Text>
-                    <TextInput onChangeText={(text) => this.setState({ name: text })}
-                        placeholder={"Nome completo"} autoFocus={true} style={this.validateRequired(this.state.name) ? [styles.textField] : [styles.textError]}
-                        value={this.state.name}
-                    />
 
+                    <View style={[styles.inputGroup]}>
+                        <Text style={[styles.inputLabel]}>
+                            Nome completo
+                        </Text>
+                        <TextInput onChangeText={(text) => this.setState({ name: text })} maxLength={100}
+                            autoFocus={true} style={this.validateRequired(this.state.name) ? [styles.inputField] : [styles.inputError]}
+                            value={this.state.name}
+                        />
+                    </View>
                     {/* <TextInput onChangeText={(text) => this.setState({ birthDate: text })}
                         placeholder={"Data de nascimento"} autoFocus={false} style={[styles.textField]}
                         value={this.state.birthDate}
                     /> */}
+                    <View style={[styles.inputGroupFlex]}>
 
-                    <DatePicker
-                        style={{ width: 200 }}
-                        date={this.state.birthDate} //initial date from state
-                        mode="date" //The enum of date, datetime and time
-                        placeholder="Data de nascimento"
-                        format="DD/MM/YYYY"
-                        confirmBtnText="Confirmar"
-                        cancelBtnText="Cancelar"
-                        customStyles={{
-                            dateIcon: {
-                                position: 'absolute',
-                                left: 0,
-                                top: 4,
-                                marginLeft: 0
-                            },
-                            dateInput: [styles.textField]
-                        }}
-                        onDateChange={(date) => { this.setState({ birthDate: date }) }}
-                    />
+                        <View style={[styles.inputGroup]} width={"55%"}>
+                            <Text style={[styles.inputLabel]}>
+                                Data de nascimento
+                            </Text>
+                            <DatePicker
+                                // style={{ width: 200 }}
+                                date={this.state.birthDate} //initial date from state
+                                mode="date" //The enum of date, datetime and time
+                                //placeholder="Data de nascimento"
+                                format="DD/MM/YYYY"
+                                confirmBtnText="Confirmar"
+                                cancelBtnText="Cancelar"
+                                customStyles={{
+                                    dateIcon: {
+                                        position: 'absolute',
+                                        left: 0,
+                                        top: 4,
+                                        marginLeft: 0
+                                    },
+                                    dateInput: this.validateRequired(this.state.birthDate) ? [styles.inputField] : [styles.inputError]
+                                }}
+                                onDateChange={(date) => { this.setState({ birthDate: date }) }}
+                            />
+                        </View>
 
-                    <TextInput onChangeText={(text) => this.setState({ grade: text })}
-                        placeholder={"Série de ingresso"} autoFocus={false} style={this.validateNumber(this.state.grade) ? [styles.textField] : [styles.textError]}
-                        value={this.state.grade}
-                    />
+                        <View style={[styles.inputGroup]} width={"35%"}>
+
+                            <Text style={[styles.inputLabel]}>
+                                Série de ingresso
+                            </Text>
+                            <TextInput onChangeText={(text) => this.setState({ grade: text })} maxLength={2}
+                                autoFocus={false} style={this.validateNumber(this.state.grade) ? [styles.inputField] : [styles.inputError]}
+                                value={this.state.grade}
+                            />
+                        </View>
+                    </View>
+
                     <Text style={[styles.title]}>
                         Endereço
                     </Text>
-                    <TextInputMask
-                        // refInput={ref => { this.input = ref }}
-                        type={'zip-code'}
-                        onChangeText={(text) => this.setState({ zipCode: text })}
-                        placeholder={"CEP"} autoFocus={false} style={this.validateRequired(this.state.addressStreet) ? [styles.textField] : [styles.textError]}
-                        value={this.state.zipCode}
-                    />
 
-                    <TextInput onChangeText={(text) => this.setState({ addressStreet: text })}
-                        placeholder={"Nome da rua"} autoFocus={false} style={this.validateRequired(this.state.addressStreet) ? [styles.textField] : [styles.textError]}
-                        value={this.state.addressStreet}
-                    />
+                    <View style={[styles.inputGroup]} width={"40%"}>
+                        <Text style={[styles.inputLabel]}>
+                            CEP
+                            </Text>
+                        <TextInputMask
+                            // refInput={ref => { this.input = ref }}
+                            type={'zip-code'} maxLength={9}
+                            onChangeText={(text) => this.setState({ zipCode: text })}
+                            autoFocus={false} style={this.validateRequired(this.state.addressStreet) ? [styles.inputField] : [styles.inputError]}
+                            value={this.state.zipCode}
+                        />
+                    </View>
 
-                    <TextInput onChangeText={(text) => this.setState({ addressNumber: text })}
-                        placeholder={"Número"} autoFocus={false} style={this.validateNumber(this.state.addressNumber) ? [styles.textField] : [styles.textError]}
-                        value={this.state.addressNumber}
-                    />
+                    <View style={[styles.inputGroup]}>
+                        <Text style={[styles.inputLabel]}>
+                            Nome da rua
+                            </Text>
+                        <TextInput onChangeText={(text) => this.setState({ addressStreet: text })} maxLength={120}
+                            autoFocus={false} style={this.validateRequired(this.state.addressStreet) ? [styles.inputField] : [styles.inputError]}
+                            value={this.state.addressStreet}
+                        />
+                    </View>
 
-                    <TextInput onChangeText={(text) => this.setState({ addressDetail: text })}
-                        placeholder={"Complemento"} autoFocus={false} style={this.validateRequired(this.state.addressDetail) ? [styles.textField] : [styles.textError]}
-                        value={this.state.addressDetail}
-                    />
+                    <View style={[styles.inputGroupFlex]}>
 
-                    <TextInput onChangeText={(text) => this.setState({ district: text })}
-                        placeholder={"Bairro"} autoFocus={false} style={this.validateRequired(this.state.district) ? [styles.textField] : [styles.textError]}
-                        value={this.state.district}
-                    />
+                        <View style={[styles.inputGroup]} width={"20%"}>
 
-                    <TextInput onChangeText={(text) => this.setState({ city: text })}
-                        placeholder={"Cidade"} autoFocus={false} style={this.validateRequired(this.state.city) ? [styles.textField] : [styles.textError]}
-                        value={this.state.city}
-                    />
+                            <Text style={[styles.inputLabel]}>
+                                Número
+                            </Text>
+                            <TextInput onChangeText={(text) => this.setState({ addressNumber: text })}
+                                autoFocus={false} style={this.validateNumber(this.state.addressNumber) ? [styles.inputField] : [styles.inputError]}
+                                value={this.state.addressNumber}
+                            />
+                        </View>
+                        <View style={[styles.inputGroup]} width={"35%"}>
+                            <Text style={[styles.inputLabel]}>
+                                Complemento
+                            </Text>
+                            <TextInput onChangeText={(text) => this.setState({ addressDetail: text })} maxLength={50}
+                                autoFocus={false} style={this.validateRequired(this.state.addressDetail) ? [styles.inputField] : [styles.inputError]}
+                                value={this.state.addressDetail}
+                            />
+                        </View>
 
-                    <TextInput onChangeText={(text) => this.setState({ state: text })}
-                        placeholder={"Estado"} autoFocus={false} style={this.validateRequired(this.state.state) ? [styles.textField] : [styles.textError]}
-                        value={this.state.state}
-                    />
+                        <View style={[styles.inputGroup]} width={"35%"}>
+
+                            <Text style={[styles.inputLabel]}>
+                                Bairro
+                            </Text>
+                            <TextInput onChangeText={(text) => this.setState({ district: text })} maxLength={100}
+                                autoFocus={false} style={this.validateRequired(this.state.district) ? [styles.inputField] : [styles.inputError]}
+                                value={this.state.district}
+                            />
+
+                        </View>
+                    </View>
+
+                    <View style={[styles.inputGroupFlex]}>
+
+                        <View style={[styles.inputGroup]} width={"70%"}>
+
+                            <Text style={[styles.inputLabel]}>
+                                Cidade
+                            </Text>
+                            <TextInput onChangeText={(text) => this.setState({ city: text })}
+                                autoFocus={false} style={this.validateRequired(this.state.city) ? [styles.inputField] : [styles.inputError]}
+                                value={this.state.city}
+                            />
+                        </View>
+
+                        <View style={[styles.inputGroup]} width={"25%"}>
+
+                            <Text style={[styles.inputLabel]}>
+                                Estado
+                            </Text>
+                            <TextInput onChangeText={(text) => this.setState({ state: text })} maxLength={2}
+                                autoFocus={false} style={this.validateRequired(this.state.state) ? [styles.inputField] : [styles.inputError]}
+                                value={this.state.state}
+                            />
+                        </View>
+                    </View>
 
                     <Text style={[styles.title]}>
                         Dados do responsável
                     </Text>
 
-                    <TextInput onChangeText={(text) => this.setState({ motherName: text })}
-                        placeholder={"Nome da mãe"} style={this.validateRequired(this.state.motherName) ? [styles.textField] : [styles.textError]}
-                        value={this.state.motherName}
-                    />
+                    <View style={[styles.inputGroup]}>
+                        <Text style={[styles.inputLabel]}>
+                            Nome da mãe
+                            </Text>
+                        <TextInput onChangeText={(text) => this.setState({ motherName: text })} maxLength={100}
+                            style={this.validateRequired(this.state.motherName) ? [styles.inputField] : [styles.inputError]}
+                            value={this.state.motherName}
+                        />
+                    </View>
 
-                    <TextInputMask
-                        // refInput={ref => { this.state.motherReg = ref }}
-                        type={'cpf'}
-                        onChangeText={(text) => this.setState({ motherReg: text })}
-                        placeholder={"CPF"} style={this.validateCPF(this.state.motherReg) ? [styles.textField] : [styles.textError]}
-                        value={this.state.motherReg} mask={"[000].[000].[000]-[00]"}
-                    />
+                    <View style={[styles.inputGroupFlex]}>
 
-                    <TextInput onChangeText={(text) => this.setState({ paymentDay: text })}
-                        placeholder={"Dia preferencial para pagamento"} style={this.validateNumber(this.state.paymentDay) ? [styles.textField] : [styles.textError]}
-                        value={this.state.paymentDay}
-                    />
+                        <View style={[styles.inputGroup]} width={"50%"}>
+                            <Text style={[styles.inputLabel]}>
+                                CPF 
+                                <Text style={[styles.errorLabel]}>
+                                    {this.validateCPF(this.state.motherReg) ? "" : " (inválido)"}
+                                </Text>
+                            </Text>
+                            <TextInputMask
+                                // refInput={ref => { this.state.motherReg = ref }}
+                                type={'cpf'} maxLength={14}
+                                onChangeText={(text) => this.setState({ motherReg: text })}
+                                style={this.validateCPF(this.state.motherReg) ? [styles.inputField] : [styles.inputError]}
+                                value={this.state.motherReg} mask={"[000].[000].[000]-[00]"}
+                            />
+                        </View>
 
+                        <View style={[styles.inputGroup]} width={"35%"}>
+                            <Text style={[styles.inputLabel]}>
+                                Dia para pagamento
+                            </Text>
+                            {/* <TextInput onChangeText={(text) => this.setState({ paymentDay: text })}
+                            style={this.validateNumber(this.state.paymentDay) ? [styles.inputField] : [styles.inputError]}
+                            value={this.state.paymentDay}
+                        /> */}
+                            <DatePicker
+                                style={{ width: 110 }}
+                                date={this.state.paymentDay} //initial date from state
+                                mode="date" //The enum of date, datetime and time
+                                //placeholder="Data de nascimento"
+                                format="D"
+                                confirmBtnText="Confirmar"
+                                cancelBtnText="Cancelar"
+                                customStyles={{
+                                    dateIcon: {
+                                        position: 'absolute',
+                                        left: 0,
+                                        top: 4,
+                                        marginLeft: 0
+                                    },
+                                    dateInput: this.validateRequired(this.state.paymentDay) ? [styles.inputField] : [styles.inputError]
+                                }}
+                                onDateChange={(date) => { this.setState({ paymentDay: date }) }}
+                            />
+                        </View>
+                    </View>
                 </ScrollView>
                 <TouchableOpacity style={[styles.saveBtn]}
                     disabled={(this.validateForm()) ? false : true}
@@ -287,6 +406,11 @@ class NewStudent extends Component {
 export default connect(null, { addStudent, updateStudent })(NewStudent);
 
 var styles = StyleSheet.create({
+    view: {
+        flex: 1,
+        backgroundColor: '#eee'
+    },
+
     saveBtn: {
         width: windowWidth,
         height: 44,
@@ -303,7 +427,7 @@ var styles = StyleSheet.create({
         fontSize: 17,
         lineHeight: 38,
         // fontFamily: 'Helvetica Neue',
-        color: "#333333",
+        color: "#333",
         padding: 16,
         paddingLeft: 0,
         flex: 1,
@@ -324,25 +448,51 @@ var styles = StyleSheet.create({
         paddingLeft: 0
     },
 
-    textField: {
-        fontWeight: "400",
-        lineHeight: 16,
-        fontSize: 14,
-        borderWidth: 1,
-        borderColor: "#dddddd",
-        // fontFamily: 'Helvetica Neue',
-        height: 36,
-        padding: 8,
-        paddingLeft: 5
+    introText: {
+        marginTop: 20
     },
 
-    textError: {
+    inputGroupFlex: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "space-between"
+    },
+
+    inputGroup: {
+        marginBottom: 10
+    },
+
+    inputLabel: {
+        lineHeight: 14,
+        fontSize: 12,
+        color: "#555"
+    },
+
+    errorLabel: {
+        lineHeight: 14,
+        fontSize: 12,
+        color: "#f00"
+    },
+
+    inputField: {
+        backgroundColor: "#fff",
         fontWeight: "400",
         lineHeight: 16,
         fontSize: 14,
         borderWidth: 1,
-        borderColor: "#ff0000",
-        // fontFamily: 'Helvetica Neue',
+        borderColor: "#ddd",
+        height: 36,
+        padding: 8,
+    },
+
+    inputError: {
+        backgroundColor: "#fff",
+        fontWeight: "400",
+        lineHeight: 16,
+        fontSize: 14,
+        borderWidth: 1,
+        borderColor: "#f00",
+        color: "#f00",
         height: 36,
         padding: 8,
         paddingLeft: 5

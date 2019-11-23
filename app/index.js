@@ -19,7 +19,7 @@ class Main extends Component {
         AsyncStorage.getItem('data', (err, data) => {
             //if it doesn't exist, extract from json file
             //save the initial data in Async
-            if (true /*data === null || err != null*/) {
+            if (data === null || err != null) {
                 AsyncStorage.setItem('data',
                     JSON.stringify(SampleData.students.sort(function (a, b) {
                         return a["name"].localeCompare(b["name"]);
