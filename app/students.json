@@ -13,7 +13,7 @@
       "city": "Rio de Janeiro",
       "state": "RJ",
       "motherName": "Maria do Carmo da Silva",
-      "motherReg": "111111111-11",
+      "motherReg": "123.456.789-09",
       "paymentDay": "1"
     },
     {
@@ -29,7 +29,7 @@
       "city": "Rio de Janeiro",
       "state": "RJ",
       "motherName": "Adriana",
-      "motherReg": "222222222-22",
+      "motherReg": "987.654.321-00",
       "paymentDay": "2"
     },
     {
@@ -45,7 +45,7 @@
       "city": "Rio de Janeiro",
       "state": "RJ",
       "motherName": "Zulmira",
-      "motherReg": "333333333-33",
+      "motherReg": "147.258.369-82",
       "paymentDay": "3"
     }
   ]

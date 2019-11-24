@@ -17,7 +17,7 @@ class NewStudent extends Component {
         this.state = {
 
             name: (props.edit) ? props.student.name : "",
-            birthDate: (props.edit) ? props.student.birthDate : "",
+            birthDate: (props.edit) ? props.student.birthDate : new Date("2000-01-01"),
             grade: (props.edit) ? props.student.grade : "",
             zipCode: (props.edit) ? props.student.zipCode : "",
             addressStreet: (props.edit) ? props.student.addressStreet : "",
@@ -28,27 +28,27 @@ class NewStudent extends Component {
             state: (props.edit) ? props.student.state : "",
             motherName: (props.edit) ? props.student.motherName : "",
             motherReg: (props.edit) ? props.student.motherReg : "",
-            paymentDay: (props.edit) ? props.student.paymentDay : ""
+            paymentDay: (props.edit) ? props.student.paymentDay : new Date(),
 
         };
 
         this.generateID = this.generateID.bind(this);
         this.addStudent = this.addStudent.bind(this);
 
-        this.fields = {
-            'name': "Nome completo",
-            'birthDate': "Data de nascimento",
-            'grade': "Série de ingresso",
-            'zipCode': "CEP",
-            'addressStreet': "Nome da rua",
-            'addressNumber': "Número",
-            'addressDetail': "Complemento",
-            'district': "Bairro",
-            'city': "Cidade",
-            'state': "Estado",
-            'motherName': "Nome da mãe",
-            'motherReg': "CPF",
-            'paymentDay': "Dia preferencial para pagamento"
+        this.validation = {
+            'name': true,
+            'birthDate': true,
+            'grade': true,
+            'zipCode': true,
+            'addressStreet': true,
+            'addressNumber': true,
+            'addressDetail': true,
+            'district': true,
+            'city': true,
+            'state': true,
+            'motherName': true,
+            'motherReg': true,
+            'paymentDay': true,
         }
 
     }
@@ -66,19 +66,10 @@ class NewStudent extends Component {
 
 
     validateForm() {
-        return this.validateRequired(this.state.name) &&
-            this.validateRequired(this.state.birthDate) &&
-            this.validateRequired(this.state.zipCode) &&
-            this.validateRequired(this.state.addressStreet) &&
-            this.validateRequired(this.state.addressDetail) &&
-            this.validateRequired(this.state.district) &&
-            this.validateRequired(this.state.city) &&
-            this.validateRequired(this.state.state) &&
-            this.validateRequired(this.state.motherName) &&
-            this.validateCPF(this.state.motherReg) &&
-            this.validateNumber(this.state.grade) &&
-            this.validateNumber(this.state.addressNumber) &&
-            this.validateNumber(this.state.paymentDay);
+        for (var field in this.validation)
+            if (this.validation[field] == false)
+                return false;
+        return true;
     };
 
     validateRequired(field) {
@@ -87,6 +78,10 @@ class NewStudent extends Component {
 
     validateNumber(field) {
         return parseInt(field);
+    }
+
+    validateCEP(field){
+        return field.length == 9;
     }
 
     validateCPF(field) {
@@ -187,8 +182,12 @@ class NewStudent extends Component {
                         <Text style={[styles.inputLabel]}>
                             Nome completo
                         </Text>
-                        <TextInput onChangeText={(text) => this.setState({ name: text })} maxLength={100}
-                            autoFocus={true} style={this.validateRequired(this.state.name) ? [styles.inputField] : [styles.inputError]}
+                        <TextInput onChangeText={(text) => {
+                            this.setState({ name: text });
+                            this.validation['name'] = this.validateRequired(text);
+                        }}
+                            maxLength={100} autoFocus={true}
+                            style={this.validation['name'] ? [styles.inputField] : [styles.inputError]}
                             value={this.state.name}
                         />
                     </View>
@@ -217,9 +216,12 @@ class NewStudent extends Component {
                                         top: 4,
                                         marginLeft: 0
                                     },
-                                    dateInput: this.validateRequired(this.state.birthDate) ? [styles.inputField] : [styles.inputError]
+                                    dateInput: this.validation['birthDate'] ? [styles.inputField] : [styles.inputError]
                                 }}
-                                onDateChange={(date) => { this.setState({ birthDate: date }) }}
+                                onDateChange={(date) => {
+                                    this.setState({ birthDate: date });
+                                    this.validation['birthDate'] = this.validateRequired(date);
+                                }}
                             />
                         </View>
 
@@ -228,8 +230,12 @@ class NewStudent extends Component {
                             <Text style={[styles.inputLabel]}>
                                 Série de ingresso
                             </Text>
-                            <TextInput onChangeText={(text) => this.setState({ grade: text })} maxLength={2}
-                                autoFocus={false} style={this.validateNumber(this.state.grade) ? [styles.inputField] : [styles.inputError]}
+                            <TextInput onChangeText={(text) => {
+                                this.setState({ grade: text });
+                                this.validation['grade'] = this.validateNumber(text);
+                            }}
+                                maxLength={2} autoFocus={false}
+                                style={this.validation['grade'] ? [styles.inputField] : [styles.inputError]}
                                 value={this.state.grade}
                             />
                         </View>
@@ -246,8 +252,12 @@ class NewStudent extends Component {
                         <TextInputMask
                             // refInput={ref => { this.input = ref }}
                             type={'zip-code'} maxLength={9}
-                            onChangeText={(text) => this.setState({ zipCode: text })}
-                            autoFocus={false} style={this.validateRequired(this.state.addressStreet) ? [styles.inputField] : [styles.inputError]}
+                            onChangeText={(text) => {
+                                this.setState({ zipCode: text });
+                                this.validation['zipCode'] = this.validateCEP(text);
+                            }}
+                            autoFocus={false}
+                            style={this.validation['zipCode'] ? [styles.inputField] : [styles.inputError]}
                             value={this.state.zipCode}
                         />
                     </View>
@@ -256,8 +266,12 @@ class NewStudent extends Component {
                         <Text style={[styles.inputLabel]}>
                             Nome da rua
                             </Text>
-                        <TextInput onChangeText={(text) => this.setState({ addressStreet: text })} maxLength={120}
-                            autoFocus={false} style={this.validateRequired(this.state.addressStreet) ? [styles.inputField] : [styles.inputError]}
+                        <TextInput onChangeText={(text) => {
+                            this.setState({ addressStreet: text });
+                            this.validation['addressStreet'] = this.validateRequired(text);
+                        }}
+                            maxLength={120} autoFocus={false}
+                            style={this.validation['addressStreet'] ? [styles.inputField] : [styles.inputError]}
                             value={this.state.addressStreet}
                         />
                     </View>
@@ -269,8 +283,12 @@ class NewStudent extends Component {
                             <Text style={[styles.inputLabel]}>
                                 Número
                             </Text>
-                            <TextInput onChangeText={(text) => this.setState({ addressNumber: text })}
-                                autoFocus={false} style={this.validateNumber(this.state.addressNumber) ? [styles.inputField] : [styles.inputError]}
+                            <TextInput onChangeText={(text) => {
+                                this.setState({ addressNumber: text });
+                                this.validation['addressNumber'] = this.validateNumber(text);
+                            }}
+                                autoFocus={false}
+                                style={this.validation['addressNumber'] ? [styles.inputField] : [styles.inputError]}
                                 value={this.state.addressNumber}
                             />
                         </View>
@@ -278,8 +296,12 @@ class NewStudent extends Component {
                             <Text style={[styles.inputLabel]}>
                                 Complemento
                             </Text>
-                            <TextInput onChangeText={(text) => this.setState({ addressDetail: text })} maxLength={50}
-                                autoFocus={false} style={this.validateRequired(this.state.addressDetail) ? [styles.inputField] : [styles.inputError]}
+                            <TextInput onChangeText={(text) => {
+                                this.setState({ addressDetail: text });
+                                this.validation['addressDetail'] = this.validateRequired(text);
+                            }}
+                                maxLength={50} autoFocus={false}
+                                style={this.validation['addressDetail'] ? [styles.inputField] : [styles.inputError]}
                                 value={this.state.addressDetail}
                             />
                         </View>
@@ -289,8 +311,12 @@ class NewStudent extends Component {
                             <Text style={[styles.inputLabel]}>
                                 Bairro
                             </Text>
-                            <TextInput onChangeText={(text) => this.setState({ district: text })} maxLength={100}
-                                autoFocus={false} style={this.validateRequired(this.state.district) ? [styles.inputField] : [styles.inputError]}
+                            <TextInput onChangeText={(text) => {
+                                this.setState({ district: text });
+                                this.validation['district'] = this.validateRequired(text);
+                            }}
+                                maxLength={100} autoFocus={false}
+                                style={this.validation['addressDetail'] ? [styles.inputField] : [styles.inputError]}
                                 value={this.state.district}
                             />
 
@@ -304,8 +330,12 @@ class NewStudent extends Component {
                             <Text style={[styles.inputLabel]}>
                                 Cidade
                             </Text>
-                            <TextInput onChangeText={(text) => this.setState({ city: text })}
-                                autoFocus={false} style={this.validateRequired(this.state.city) ? [styles.inputField] : [styles.inputError]}
+                            <TextInput onChangeText={(text) => {
+                                this.setState({ city: text });
+                                this.validation['city'] = this.validateRequired(text);
+                            }}
+                                autoFocus={false}
+                                style={this.validation['city'] ? [styles.inputField] : [styles.inputError]}
                                 value={this.state.city}
                             />
                         </View>
@@ -315,8 +345,12 @@ class NewStudent extends Component {
                             <Text style={[styles.inputLabel]}>
                                 Estado
                             </Text>
-                            <TextInput onChangeText={(text) => this.setState({ state: text })} maxLength={2}
-                                autoFocus={false} style={this.validateRequired(this.state.state) ? [styles.inputField] : [styles.inputError]}
+                            <TextInput onChangeText={(text) => {
+                                this.setState({ state: text });
+                                this.validation['state'] = this.validateRequired(text);
+                            }}
+                                maxLength={2} autoFocus={false}
+                                style={this.validation['state'] ? [styles.inputField] : [styles.inputError]}
                                 value={this.state.state}
                             />
                         </View>
@@ -330,8 +364,12 @@ class NewStudent extends Component {
                         <Text style={[styles.inputLabel]}>
                             Nome da mãe
                             </Text>
-                        <TextInput onChangeText={(text) => this.setState({ motherName: text })} maxLength={100}
-                            style={this.validateRequired(this.state.motherName) ? [styles.inputField] : [styles.inputError]}
+                        <TextInput onChangeText={(text) => {
+                            this.setState({ motherName: text });
+                            this.validation['motherName'] = this.validateRequired(text);
+                        }}
+                            maxLength={100}
+                            style={this.validation['motherName'] ? [styles.inputField] : [styles.inputError]}
                             value={this.state.motherName}
                         />
                     </View>
@@ -340,16 +378,19 @@ class NewStudent extends Component {
 
                         <View style={[styles.inputGroup]} width={"50%"}>
                             <Text style={[styles.inputLabel]}>
-                                CPF 
+                                CPF
                                 <Text style={[styles.errorLabel]}>
-                                    {this.validateCPF(this.state.motherReg) ? "" : " (inválido)"}
+                                    {this.validation['motherReg'] ? "" : " (inválido)"}
                                 </Text>
                             </Text>
                             <TextInputMask
                                 // refInput={ref => { this.state.motherReg = ref }}
                                 type={'cpf'} maxLength={14}
-                                onChangeText={(text) => this.setState({ motherReg: text })}
-                                style={this.validateCPF(this.state.motherReg) ? [styles.inputField] : [styles.inputError]}
+                                onChangeText={(text) => {
+                                    this.setState({ motherReg: text });
+                                    this.validation['motherReg'] = this.validateCPF(text);
+                                }}
+                                style={this.validation['motherReg'] ? [styles.inputField] : [styles.inputError]}
                                 value={this.state.motherReg} mask={"[000].[000].[000]-[00]"}
                             />
                         </View>
@@ -377,9 +418,12 @@ class NewStudent extends Component {
                                         top: 4,
                                         marginLeft: 0
                                     },
-                                    dateInput: this.validateRequired(this.state.paymentDay) ? [styles.inputField] : [styles.inputError]
+                                    dateInput: this.validation['paymentDay'] ? [styles.inputField] : [styles.inputError]
                                 }}
-                                onDateChange={(date) => { this.setState({ paymentDay: date }) }}
+                                onDateChange={(date) => {
+                                    this.setState({ paymentDay: date });
+                                    this.validation['paymentDay'] = this.validateRequired(date);
+                                }}
                             />
                         </View>
                     </View>
@@ -482,7 +526,7 @@ var styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#ddd",
         height: 36,
-        padding: 8,
+        padding: 8
     },
 
     inputError: {
@@ -494,7 +538,6 @@ var styles = StyleSheet.create({
         borderColor: "#f00",
         color: "#f00",
         height: 36,
-        padding: 8,
-        paddingLeft: 5
+        padding: 8
     },
 });

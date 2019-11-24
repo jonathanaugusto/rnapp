@@ -237,8 +237,8 @@ const styles = StyleSheet.create({
     },
 
     buttonAdd: {
-        backgroundColor: '#ff5722',
-        borderColor: '#ff5722',
+        backgroundColor: '#229922',
+        borderColor: '#229922',
         borderWidth: 1,
         height: 50,
         width: 50,

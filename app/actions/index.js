@@ -71,13 +71,9 @@ export function deleteStudent(id){
         AsyncStorage.getItem('data', (err, students) => {
             if (students !== null){
                 students = JSON.parse(students);
-                console.log(id);
-                console.log(students);
                 var index = getIndex(students, id); //find the index of the student with the id passed
-                console.log(index);
                 if(index !== -1) students.splice(index, 1);//if yes, remove the STUDENT
                 
-                console.log(students);
                 AsyncStorage.setItem('data', JSON.stringify(students), () => {
                     dispatch({type: DELETE_STUDENT, id:id});
                 });
